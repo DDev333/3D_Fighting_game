@@ -3566,8 +3566,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7e0ca901d976c94e871300bd7922fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 2
+  movementSpeed: 4
   rotationSpeed: 10
+  attackCooldown: 0.5
+  attackDamage: 5
+  attackAnimations:
+  - Attack1Animation
+  - Attack2Animation
+  - Attack3Animation
+  - Attack4Animation
+  lastAttackTime: 0
 --- !u!143 &8926182691672742889
 CharacterController:
   m_ObjectHideFlags: 0

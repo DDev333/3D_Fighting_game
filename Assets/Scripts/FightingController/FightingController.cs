@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class FightingController : MonoBehaviour
 {
+    [Header("Player Movement")]
     public float movementSpeed = 1f;
     public float rotationSpeed = 10f;
     private CharacterController characterController;
     private Animator animator;
+
+    [Header("Player Fight")]
+    public float attackCooldown = 0.5f;
+    public int attackDamage = 5;
+    public string[] attackAnimations = { "Attack1Animation", "Attack2Animation", "Attack3Animation", "Attack4Animation" };
+    public float dodgeDistance = 2f;
+    public float lastAttackTime;
 
     void Awake()
     {
@@ -18,6 +26,24 @@ public class FightingController : MonoBehaviour
     void Update()
     {
         PerformMovement();
+        performDodgeFront();
+
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            PerformAttack(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            PerformAttack(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            PerformAttack(2);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            PerformAttack(3);
+        }
     }
 
     void PerformMovement()
@@ -51,5 +77,32 @@ public class FightingController : MonoBehaviour
         }
 
         characterController.Move(movement * movementSpeed * Time.deltaTime);
+    }
+
+    void PerformAttack(int attackIndex)
+    {
+        if (Time.time - lastAttackTime > attackCooldown)
+        {
+            animator.Play(attackAnimations[attackIndex]);
+
+            int damage = attackDamage;
+            Debug.Log("Performed attack " + (attackIndex + 1) + " dealing " + damage + " damage.");
+
+            lastAttackTime = Time.time;
+        }
+        else
+        {
+            Debug.Log("Cannot perform attack yet. Cooldown time remaining.");
+        }
+    }
+
+    void performDodgeFront()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            animator.Play("DodgeFrontAnimation");
+            Vector3 dodgeDirection = transform.forward * dodgeDistance;
+            characterController.Move(dodgeDirection);
+        }
     }
 }
